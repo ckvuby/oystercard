@@ -29,6 +29,6 @@ class Oystercard
   end
 
   def in_journey?
-    
+    @status
   end
 end

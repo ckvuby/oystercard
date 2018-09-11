@@ -1,17 +1,18 @@
 require 'oystercard'
 
 describe Oystercard do
+  subject(:oyster) { described_class.new }
 
   # In order to use public transport
   # As a customer
   # I want money on my card
 
   it 'responds to balance' do
-    expect(subject).to respond_to :balance
+    expect(oyster).to respond_to :balance
   end
 
   it 'expect oystercard to have default starting value of "0"' do
-    expect(subject.balance).to eq(0)
+    expect(oyster.balance).to eq(0)
   end
 
   # In order to keep using public transport
@@ -21,11 +22,11 @@ describe Oystercard do
   describe '#add_money' do
 
     it 'tops up the card' do
-      expect(subject.add_money(30)).to eq(subject.balance)
+      expect(oyster.add_money(30)).to eq(oyster.balance)
     end
 
     it 'tops up the card2' do
-      expect{subject.add_money(30)}.to change{subject.balance}.from(0).to(30)
+      expect{oyster.add_money(30)}.to change{oyster.balance}.from(0).to(30)
     end
 
 
@@ -36,8 +37,8 @@ describe Oystercard do
 
     it 'expect error to be raised if top_up amount takes "balance" over 90' do
       maximum_balance = Oystercard::MAXIMUM_VALUE
-      subject.add_money(maximum_balance)
-      expect{subject.add_money(1)}.to raise_error("Maximum balance of #{maximum_balance} exceeded")
+      oyster.add_money(maximum_balance)
+      expect{oyster.add_money(1)}.to raise_error("Maximum balance of #{maximum_balance} exceeded")
     end
   end
 
@@ -48,9 +49,9 @@ describe Oystercard do
     it { is_expected.to respond_to(:deduct_money).with(1).argument }
 
     it 'deducts money from card' do
-      subject.add_money(30)
-      expect{subject.deduct_money(9)}.to change {subject.balance}.by -9
-      # expect{subject.deduct_money(9)}.to change{subject.balance}.from(30).to(21)
+      oyster.add_money(30)
+      expect{oyster.deduct_money(9)}.to change {oyster.balance}.by -9
+      # expect{oyster.deduct_money(9)}.to change{oyster.balance}.from(30).to(21)
     end
 
   # In order to get through the barriers
@@ -62,9 +63,14 @@ describe Oystercard do
     it { is_expected.to respond_to(:touch_in)}
 
     it 'expects the status of cards that are touched in to be true' do
-      subject.touch_in
-      expect(subject.status).to be(true)
+      oyster.touch_in
+      expect(oyster.status).to be(true)
     end
+
+    it 'raises an error when card balance is below minimum value' do
+      expect {oyster.touch_in}.to raise_error('Cannot touch in: balance below minimum')
+    end
+    
 
     
   end
@@ -74,9 +80,9 @@ describe Oystercard do
     it { is_expected.to respond_to(:touch_out)}
 
     it 'expects the status of cards that are touched out to be false' do
-      subject.touch_in
-      subject.touch_out
-      expect(subject.status).to be(false) 
+      oyster.touch_in
+      oyster.touch_out
+      expect(oyster.status).to be(false) 
     end
     
   end
@@ -85,10 +91,15 @@ describe Oystercard do
     
     it { is_expected.to respond_to(:in_journey?)}
 
-    it 'shows us if a card is in use' do
-      subject.touch_in
-      expect(subject.in_journey?).to eq true
+    it 'shows us if a card is in use when it has been touched in' do
+      oyster.touch_in
+      expect(oyster.in_journey?).to eq true
     end
+    it 'shows us that a card is not in use when it has been touched in' do
+      oyster.touch_out
+      expect(oyster).not_to be_in_journey
+    end
+
     
   end
 
