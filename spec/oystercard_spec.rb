@@ -27,8 +27,6 @@ describe Oystercard do
       expect{oyster.add_money(amount)}.to change{oyster.balance}.by(amount)
     end
 
-
-
   # In order to protect my money from theft or loss
   # As a customer
   # I want a maximum limit (of £90) on my card
@@ -39,13 +37,19 @@ describe Oystercard do
       expect{oyster.add_money(1)}.to raise_error("Maximum balance of #{maximum_balance} exceeded")
     end
   end
-
   
   # In order to get through the barriers
   # As a customer
   # I need to touch in and out
+  describe '#touch_out' do
 
-  context 'if cards are topped up above minimum value' do
+    it 'raises an error when card balance is below minimum value' do
+      expect {oyster.touch_in}.to raise_error('Cannot touch in: balance below minimum')
+    end
+ 
+  end
+
+  context 'if card is topped up above minimum value' do
     before :each do
       oyster.add_money(Oystercard::MAXIMUM_VALUE)
     end
@@ -57,10 +61,9 @@ describe Oystercard do
         expect(oyster.status).to be(true)
       end
 
-      it 'raises an error when card balance is below minimum value' do
-        allow(oyster).to receive(:balance).and_return(0)
-        oyster.balance
-        expect {oyster.touch_in}.to raise_error('Cannot touch in: balance below minimum')
+      it 'stores the station where the card is touched in' do
+        oyster.touch_in(station)
+        expect(oyster.station).to eq(station)
       end
 
       # In order to pay for my journey
@@ -95,7 +98,6 @@ describe Oystercard do
         oyster.touch_out
         expect(oyster).not_to be_in_journey
       end
-
       
     end
 
