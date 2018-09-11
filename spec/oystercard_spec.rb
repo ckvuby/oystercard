@@ -61,6 +61,10 @@ describe Oystercard do
     
     it { is_expected.to respond_to(:touch_in)}
 
+    it 'expects the status of cards that are touched in to be true' do
+      subject.touch_in
+      expect(subject.status).to be(true)
+    end
 
     
   end
@@ -68,6 +72,12 @@ describe Oystercard do
   describe "#touch_out" do
     
     it { is_expected.to respond_to(:touch_out)}
+
+    it 'expects the status of cards that are touched out to be false' do
+      subject.touch_in
+      subject.touch_out
+      expect(subject.status).to be(false) 
+    end
     
   end
   
@@ -75,9 +85,6 @@ describe Oystercard do
     
     it { is_expected.to respond_to(:in_journey?)}
 
-    it 'expects in journey to return "true" if card was touched in' do
-      expect(subject.touch_in).to be_in_journey
-    end
     
   end
 
