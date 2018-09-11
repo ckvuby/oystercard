@@ -81,9 +81,14 @@ describe Oystercard do
         oyster.touch_out
         expect(oyster.status).to be(false) 
       end
-      
+
+      context 'on completion of journey' do
+        it 'deducts the minimum fare from oyster balance' do
+          expect{oyster.touch_out}.to change{oyster.balance}.by -Oystercard::MINIMUM_VALUE 
+        end
+      end
     end
-    
+
     describe "#in_journey" do
 
       it 'shows us if a card is in use when it has been touched in' do
