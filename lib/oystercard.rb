@@ -17,10 +17,6 @@ class Oystercard
 
   end
 
-  def deduct_money(amount)
-    @balance -= amount
-  end
-
   def touch_in
     fail 'Cannot touch in: balance below minimum' if balance < MINIMUM_VALUE
     @status = true
@@ -28,9 +24,17 @@ class Oystercard
 
   def touch_out
     @status = false
+    deduct_money(MINIMUM_VALUE)
   end
 
   def in_journey?
     status
   end
+
+  private
+
+  def deduct_money(amount)
+    @balance -= amount
+  end
+
 end

@@ -58,19 +58,14 @@ describe Oystercard do
       end
 
       it 'raises an error when card balance is below minimum value' do
-        oyster.deduct_money(Oystercard::MAXIMUM_VALUE)
+        allow(oyster).to receive(:balance).and_return(0)
+        oyster.balance
         expect {oyster.touch_in}.to raise_error('Cannot touch in: balance below minimum')
       end
 
       # In order to pay for my journey
       # As a customer
-      # I need my fare deducted from my card
-
-      it 'deducts money from card' do
-        amount = rand(1..Oystercard::MAXIMUM_VALUE)
-        expect{oyster.deduct_money(amount)}.to change {oyster.balance}.by -amount
-        # expect{oyster.deduct_money(9)}.to change{oyster.balance}.from(30).to(21)
-      end
+      # I need my fare deducted from my car
       
     end
     
@@ -87,6 +82,7 @@ describe Oystercard do
           expect{oyster.touch_out}.to change{oyster.balance}.by -Oystercard::MINIMUM_VALUE 
         end
       end
+
     end
 
     describe "#in_journey" do
