@@ -60,6 +60,8 @@ describe Oystercard do
   describe "#touch_in" do
     
     it { is_expected.to respond_to(:touch_in)}
+
+
     
   end
   
@@ -72,6 +74,10 @@ describe Oystercard do
   describe "#in_journey" do
     
     it { is_expected.to respond_to(:in_journey?)}
+
+    it 'expects in journey to return "true" if card was touched in' do
+      expect(subject.touch_in).to be_in_journey
+    end
     
   end
 
