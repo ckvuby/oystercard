@@ -3,6 +3,7 @@ class Oystercard
   attr_reader :balance, :status
 
   MAXIMUM_VALUE = 90
+  MINIMUM_VALUE = 1
 
   def initialize
     @balance = 0
@@ -21,6 +22,7 @@ class Oystercard
   end
 
   def touch_in
+    fail 'Cannot touch in: balance below minimum' if balance < MINIMUM_VALUE
     @status = true
   end
 
@@ -29,6 +31,6 @@ class Oystercard
   end
 
   def in_journey?
-    @status
+    status
   end
 end
