@@ -1,6 +1,6 @@
 class Oystercard
 
-  attr_reader :balance, :status
+  attr_reader :balance, :status, :departure_station
 
   MAXIMUM_VALUE = 90
   MINIMUM_VALUE = 1
@@ -8,6 +8,7 @@ class Oystercard
   def initialize
     @balance = 0
     @status = false
+    @departure_station
   end
 
   def add_money(amount)
@@ -17,9 +18,10 @@ class Oystercard
 
   end
 
-  def touch_in
+  def touch_in(station)
     fail 'Cannot touch in: balance below minimum' if balance < MINIMUM_VALUE
     @status = true
+    @departure_station = station
   end
 
   def touch_out

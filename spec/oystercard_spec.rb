@@ -44,61 +44,65 @@ describe Oystercard do
   describe '#touch_out' do
 
     it 'raises an error when card balance is below minimum value' do
-      expect {oyster.touch_in}.to raise_error('Cannot touch in: balance below minimum')
+      expect {oyster.touch_in("test")}.to raise_error('Cannot touch in: balance below minimum')
     end
  
   end
 
   context 'if card is topped up above minimum value' do
     before :each do
-      oyster.add_money(Oystercard::MAXIMUM_VALUE)
+      oyster.add_money(Oystercard::MAXIMUM_VALUE) 
+      station = "Barbican"
     end
   
       describe "#touch_in" do
-      
-      it 'expects the status of cards that are touched in to be true' do
-        oyster.touch_in
-        expect(oyster.status).to be(true)
-      end
 
-      it 'stores the station where the card is touched in' do
-        oyster.touch_in(station)
-        expect(oyster.station).to eq(station)
-      end
+        it { is_expected.to respond_to(:touch_in).with(1).arguments } 
+
+        it 'expects the status of cards that are touched in to be true' do
+          oyster.touch_in("test")
+          expect(oyster.status).to be(true)
+        end
+
+        it 'stores the station where the card is touched in' do
+          oyster.touch_in("test")
+          expect(oyster.departure_station).to eq("test")
+        end
 
       # In order to pay for my journey
       # As a customer
       # I need my fare deducted from my car
-      
-    end
+      end
     
-    describe "#touch_out" do
+      describe "#touch_out" do
 
-      it 'expects the status of cards that are touched out to be false' do
-        oyster.touch_in
-        oyster.touch_out
-        expect(oyster.status).to be(false) 
-      end
-
-      context 'on completion of journey' do
-        it 'deducts the minimum fare from oyster balance' do
-          expect{oyster.touch_out}.to change{oyster.balance}.by -Oystercard::MINIMUM_VALUE 
+        it 'expects the status of cards that are touched out to be false' do
+          oyster.touch_in("test")
+          oyster.touch_out
+          expect(oyster.status).to be(false) 
         end
+
+        context 'on completion of journey' do
+          it 'deducts the minimum fare from oyster balance' do
+            expect{oyster.touch_out}.to change{oyster.balance}.by -Oystercard::MINIMUM_VALUE 
+          end
+        end
+
       end
 
-    end
+      describe "#in_journey" do
 
-    describe "#in_journey" do
+        it 'shows us if a card is in use when it has been touched in' do
+          oyster.touch_in("test")
+          expect(oyster.in_journey?).to eq true
+        end
+        it 'shows us that a card is not in use when it has been touched out' do
+          oyster.touch_out
+          expect(oyster).not_to be_in_journey
+        end
+       
+      # end
 
-      it 'shows us if a card is in use when it has been touched in' do
-        oyster.touch_in
-        expect(oyster.in_journey?).to eq true
-      end
-      it 'shows us that a card is not in use when it has been touched out' do
-        oyster.touch_out
-        expect(oyster).not_to be_in_journey
-      end
-      
     end
 
   end
