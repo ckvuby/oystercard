@@ -59,19 +59,10 @@ describe Oystercard do
         
         it { is_expected.to respond_to(:touch_in).with(1).arguments } 
 
-        it 'expects the status of cards that are touched in to be true' do
-          oyster.touch_in(station)
-          expect(oyster.status).to be(true)
-        end
-
         it 'stores the station where the card is touched in' do
           oyster.touch_in(station)
           expect(oyster.departure_station).to eq(station)
         end
-
-      # In order to pay for my journey
-      # As a customer
-      # I need my fare deducted from my car
       end
     
       describe "#touch_out" do
@@ -82,12 +73,7 @@ describe Oystercard do
           oyster.touch_out
           expect(oyster.departure_station).to eq(nil)
         end
-        
-        it 'expects the status of cards that are touched out to be false' do
-          oyster.touch_in(station)
-          oyster.touch_out
-          expect(oyster.status).to be(false) 
-        end
+
 
         context 'on completion of journey' do
           it 'deducts the minimum fare from oyster balance' do
@@ -98,14 +84,19 @@ describe Oystercard do
       end
 
       describe "#in_journey" do
-
+      let(:station) {double :station}
         it 'shows us if a card is in use when it has been touched in' do
-          oyster.touch_in("test")
+          oyster.touch_in(station)
           expect(oyster.in_journey?).to eq true
         end
         it 'shows us that a card is not in use when it has been touched out' do
           oyster.touch_out
-          expect(oyster).not_to be_in_journey
+          expect(oyster.departure_station).to eq(nil)
+        end
+        it 'returns false after touching out' do
+          oyster.touch_in(station)
+          oyster.touch_out
+          expect(oyster.in_journey?).to eq(false)
         end
        
     end
