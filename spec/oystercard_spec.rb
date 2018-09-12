@@ -51,22 +51,22 @@ describe Oystercard do
 
   context 'if card is topped up above minimum value' do
     before :each do
-      oyster.add_money(Oystercard::MAXIMUM_VALUE) 
-      station = "Barbican"
+      oyster.add_money(Oystercard::MAXIMUM_VALUE)
     end
   
       describe "#touch_in" do
-
+        let(:station) { double :station }
+        
         it { is_expected.to respond_to(:touch_in).with(1).arguments } 
 
         it 'expects the status of cards that are touched in to be true' do
-          oyster.touch_in("test")
+          oyster.touch_in(station)
           expect(oyster.status).to be(true)
         end
 
         it 'stores the station where the card is touched in' do
-          oyster.touch_in("test")
-          expect(oyster.departure_station).to eq("test")
+          oyster.touch_in(station)
+          expect(oyster.departure_station).to eq(station)
         end
 
       # In order to pay for my journey
@@ -75,9 +75,16 @@ describe Oystercard do
       end
     
       describe "#touch_out" do
+        let(:station) { double :station }
 
+        it 'expects the departure station to be nil after touching out' do 
+          oyster.touch_in(station)
+          oyster.touch_out
+          expect(oyster.departure_station).to eq(nil)
+        end
+        
         it 'expects the status of cards that are touched out to be false' do
-          oyster.touch_in("test")
+          oyster.touch_in(station)
           oyster.touch_out
           expect(oyster.status).to be(false) 
         end
@@ -101,8 +108,6 @@ describe Oystercard do
           expect(oyster).not_to be_in_journey
         end
        
-      # end
-
     end
 
   end
