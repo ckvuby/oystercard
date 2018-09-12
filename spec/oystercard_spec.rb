@@ -67,10 +67,10 @@ describe Oystercard do
     
       describe "#touch_out" do
         let(:station) { double :station }
-
+        let(:exit_station) { double :exit_station }
         it 'expects the entry station to be nil after touching out' do 
           oyster.touch_in(station)
-          oyster.touch_out(station)
+          oyster.touch_out(exit_station)
           expect(oyster.entry_station).to eq(nil)
         end
 
@@ -80,7 +80,7 @@ describe Oystercard do
           it { is_expected.to respond_to(:touch_out).with(1).arguments }
 
           it 'deducts the minimum fare from oyster balance' do
-            expect{oyster.touch_out(station)}.to change{oyster.balance}.by -Oystercard::MINIMUM_VALUE 
+            expect{oyster.touch_out(exit_station)}.to change{oyster.balance}.by -Oystercard::MINIMUM_VALUE 
           end
         end
 
@@ -104,8 +104,19 @@ describe Oystercard do
           expect(oyster.in_journey?).to eq(false)
         end
        
-    end
-
-  end
-
+      end
+      
+      describe "# hash of journey" do 
+      let(:entry) {double :entry}
+      let(:exit_station) {double :exit_station}
+        it 'Should return an empty hash to start' do
+          expect(oyster.history).to eq([])  
+        end
+        it 'Should return a hash with :entry and :exit' do
+          oyster.touch_in(entry)
+          oyster.touch_out(exit_station)
+          expect(oyster.history).to eq([{:entry => entry, :exit_station => exit_station }])
+        end
+       end
+      end 
 end
