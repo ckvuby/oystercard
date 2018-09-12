@@ -68,18 +68,23 @@ describe Oystercard do
       describe "#touch_out" do
         let(:station) { double :station }
 
-        it 'expects the departure station to be nil after touching out' do 
+        it 'expects the entry station to be nil after touching out' do 
           oyster.touch_in(station)
-          oyster.touch_out
+          oyster.touch_out(station)
           expect(oyster.entry_station).to eq(nil)
         end
 
 
         context 'on completion of journey' do
+          
+          it { is_expected.to respond_to(:touch_out).with(1).arguments }
+
           it 'deducts the minimum fare from oyster balance' do
-            expect{oyster.touch_out}.to change{oyster.balance}.by -Oystercard::MINIMUM_VALUE 
+            expect{oyster.touch_out(station)}.to change{oyster.balance}.by -Oystercard::MINIMUM_VALUE 
           end
         end
+
+
 
       end
 
@@ -90,12 +95,12 @@ describe Oystercard do
           expect(oyster.in_journey?).to eq true
         end
         it 'shows us that a card is not in use when it has been touched out' do
-          oyster.touch_out
+          oyster.touch_out(station)
           expect(oyster.entry_station).to eq(nil)
         end
         it 'returns false after touching out' do
           oyster.touch_in(station)
-          oyster.touch_out
+          oyster.touch_out(station)
           expect(oyster.in_journey?).to eq(false)
         end
        

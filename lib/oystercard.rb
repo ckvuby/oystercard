@@ -1,6 +1,6 @@
 class Oystercard
 
-  attr_reader :balance, :status, :entry_station
+  attr_reader :balance, :status, :entry_station, :exit_station
 
   MAXIMUM_VALUE = 90
   MINIMUM_VALUE = 1
@@ -8,6 +8,7 @@ class Oystercard
   def initialize
     @balance = 0
     @entry_station
+    @exit_station
   end
 
   def add_money(amount)
@@ -22,7 +23,7 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out(exit_station)
     @entry_station = nil
     deduct_money(MINIMUM_VALUE)
   end
