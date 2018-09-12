@@ -61,7 +61,7 @@ describe Oystercard do
 
         it 'stores the station where the card is touched in' do
           oyster.touch_in(station)
-          expect(oyster.departure_station).to eq(station)
+          expect(oyster.entry_station).to eq(station)
         end
       end
     
@@ -71,7 +71,7 @@ describe Oystercard do
         it 'expects the departure station to be nil after touching out' do 
           oyster.touch_in(station)
           oyster.touch_out
-          expect(oyster.departure_station).to eq(nil)
+          expect(oyster.entry_station).to eq(nil)
         end
 
 
@@ -91,7 +91,7 @@ describe Oystercard do
         end
         it 'shows us that a card is not in use when it has been touched out' do
           oyster.touch_out
-          expect(oyster.departure_station).to eq(nil)
+          expect(oyster.entry_station).to eq(nil)
         end
         it 'returns false after touching out' do
           oyster.touch_in(station)
