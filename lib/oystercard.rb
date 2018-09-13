@@ -4,6 +4,7 @@ class Oystercard
 
   MAXIMUM_VALUE = 90
   MINIMUM_VALUE = 1
+  PENALTY = 6
 
   def initialize
     @balance = 0
@@ -29,7 +30,7 @@ class Oystercard
   end
 
   def in_journey?
-    !@entry_station.nil? 
+    !@entry_station.nil?
   end
 
   private
