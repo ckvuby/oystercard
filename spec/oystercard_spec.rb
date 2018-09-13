@@ -120,3 +120,10 @@ describe Oystercard do
        end
       end 
 end
+
+describe Station do
+  it 'expects station to have a zone attribute associated with it' do
+    expect(subject.zone).to eq('1')
+  end
+
+end
