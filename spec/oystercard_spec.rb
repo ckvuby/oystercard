@@ -133,3 +133,19 @@ describe Station do
   end
 
 end
+
+describe Journey do
+  let(:station) {double (:station)}
+  let(:station2) {double (:station2)}
+  it 'expects journey.fare to return the minimum fare ' do
+    oyster.touch_in(station)
+    oyster.touch_out(station2)
+    expect(subject.fare).to eq(MINIMUM_VALUE)
+  end
+  
+  it 'expects journey.fare to return penalty fare' do
+    oyster.touch_out(station)
+    oyster.touch_out(station2)
+    expect(subject.fare).to eq(PENALTY)
+  end
+end

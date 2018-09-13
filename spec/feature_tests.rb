@@ -33,6 +33,25 @@ oyster.history
 # I want to know what zone a station is in
 
 require './lib/oystercard.rb'
+require './lib/station.rb'
 oyster = Oystercard.new
-station = Station.new
+station = Station.new('Waterloo', 1)
 station.zone
+
+# In order to be charged correctly
+# As a customer
+# I need a penalty charge deducted if I fail to touch in or out
+
+require './lib/oystercard.rb'
+require './lib/station.rb'
+oyster = Oystercard.new
+station = Station.new('Waterloo', 1)
+station2 = Station.new('Barbican', 2)
+oyster.add_money(23)
+
+oyster.touch_in(station)
+oyster.touch_in(station2)
+
+oyster.touch_out(station)
+oyster.touch_out(station2)
+
