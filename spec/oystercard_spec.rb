@@ -1,5 +1,6 @@
 require 'oystercard'
 require 'station'
+require 'journey'
 
 describe Oystercard do
   subject(:oyster) { described_class.new }
@@ -135,6 +136,7 @@ describe Station do
 end
 
 describe Journey do
+  let (:oyster) {instance_double (:oystercard)}
   let(:station) {double (:station)}
   let(:station2) {double (:station2)}
   it 'expects journey.fare to return the minimum fare ' do
