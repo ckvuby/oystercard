@@ -123,8 +123,9 @@ describe Oystercard do
 end
 
 describe Station do
+  subject {described_class.new('Waterloo', 1)}
   it 'expects station to have a zone attribute associated with it' do
-    expect(subject.zone).to eq('1')
+    expect(subject.zone).to eq(1)
   end
 
   it 'expects station to have a name' do
