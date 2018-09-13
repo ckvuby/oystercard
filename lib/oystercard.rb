@@ -1,16 +1,13 @@
 class Oystercard
 
-  attr_reader :balance, :status, :entry_station, :exit_station, :history, :new_hash
+  attr_reader :balance, :status, :entry_station, :history
 
   MAXIMUM_VALUE = 90
   MINIMUM_VALUE = 1
 
   def initialize
     @balance = 0
-    @entry_station
-    @exit_station
     @history = []
-    @new_hash = {}
   end
 
   def add_money(amount)
@@ -23,13 +20,11 @@ class Oystercard
   def touch_in(station)
     fail 'Cannot touch in: balance below minimum' if balance < MINIMUM_VALUE
     @entry_station = station
-    @new_hash[:entry] = station
   end
 
   def touch_out(exit_station)
+    @history << { :entry => entry_station, :exit_station => exit_station}
     @entry_station = nil
-    @new_hash[:exit_station] = exit_station
-    @history.push(@new_hash)
     deduct_money(MINIMUM_VALUE)
   end
 
