@@ -15,7 +15,7 @@ I need to know where I've travelled from
 require './lib/oystercard.rb'
 oyster = Oystercard.new
 oyster.touch_in("Barbican")
-oyster.station 
+oyster.station
 
 
 In order to know where I have been
